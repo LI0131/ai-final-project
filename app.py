@@ -14,7 +14,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if not args.file:
-        sys.exit('Include dataset to run network')
+        sys.exit('Include dataset to run network using: --file <PATH>')
 
     x_train, y_train = translate.run(args.file)
 

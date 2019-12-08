@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+keras = "*"
+numpy = "*"
+pandas = "*"
+tensorflow = "*"
+
+[scripts]
+ffnn = 'python3 app.py'
+
+[requires]
+python_version = "3.7"
