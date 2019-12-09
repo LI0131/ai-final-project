@@ -1,5 +1,7 @@
 import pandas as pd
+import numpy as np
 from datetime import date
+from scipy.special import expit 
 
 
 def encode(data, column):
@@ -30,15 +32,32 @@ def encode_game_time(data, column):
     return classification
 
 
+def encode_wind_speed(data):
+    '''
+    TODO: encode the windspeed cols that are not filled with the average for all speeds (Regularization)
+    '''
+    temp = []
+    for item in data:
+        if type(item) == str:
+            string = item.split(' ')
+            temp.append(string[0])
+        else:
+            temp.append(item)
+    return temp
+
+
 def run(path):
     data = pd.read_csv(path, header='infer')
 
     # convert column names to lower case
     data.columns = data.columns.map(lambda x: x.lower())
-
+    
     # convert UTC time of snap to gametime classification
-    data['timesnap'] = encode_game_time(data, 'timesnap')
+    for col in ['timesnap', 'timehandoff']:
+        data[col] = encode_game_time(data, col)
 
+    data = data.drop(columns=['windspeed', 'winddirection', 'temperature', 'gameweather', 'stadiumtype'])
+    
     # values which we will map
     data['team'] = data['team'].map({'away':0, 'home':1})
     data['fieldposition'] = [0 if pos == home else 1 for pos, home in zip(
@@ -49,8 +68,7 @@ def run(path):
     columns = [
         'offenseformation','offensepersonnel','defensepersonnel','playdirection',
         'position', 'displayname', 'playercollegename', 'stadium', 'location',
-        'hometeamabbr', 'visitorteamabbr', 'stadiumtype', 'turf', 'gameweather', 
-        'winddirection', 'possessionteam'
+        'hometeamabbr', 'visitorteamabbr', 'turf', 'possessionteam'
     ]
 
     for i in range(len(columns)): 
@@ -73,5 +91,8 @@ def run(path):
         )
     ]
 
+    # for col in data.columns:
+    #    data[col] = expit(data[col])
+
     # flatten rows in dataframe
-    return [row.values.flatten() for index, row in data.iterrows()], data['nflidrusher']
+    return np.array([row.values.flatten() for index, row in data.iterrows()], dtype='float32'), data['yards']
