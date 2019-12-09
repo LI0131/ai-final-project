@@ -57,6 +57,9 @@ def run(path):
         data[col] = encode_game_time(data, col)
 
     data = data.drop(columns=['windspeed', 'winddirection', 'temperature', 'gameweather', 'stadiumtype'])
+
+    # this removes rows which still contain empty values
+    data = data.dropna()
     
     # values which we will map
     data['team'] = data['team'].map({'away':0, 'home':1})
@@ -90,9 +93,6 @@ def run(path):
             birthdate.split('/')  for birthdate in data['playerbirthdate']
         )
     ]
-
-    # for col in data.columns:
-    #    data[col] = expit(data[col])
 
     # flatten rows in dataframe
     return np.array([row.values.flatten() for index, row in data.iterrows()], dtype='float32'), data['yards']

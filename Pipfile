@@ -10,6 +10,7 @@ keras = "*"
 numpy = "*"
 pandas = "*"
 tensorflow = "*"
+scipy = "*"
 
 [scripts]
 ffnn = 'python3 app.py'

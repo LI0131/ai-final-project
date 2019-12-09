@@ -2,12 +2,13 @@ import os
 import keras
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, LeakyReLU
 from keras.utils import to_categorical
 
-BATCH_SIZE = os.environ.get('BATCH_SIZE', 16)
-EPOCHS = os.environ.get('EPOCHS', 3)
-TRAINING_PERCENTAGE = os.environ.get('TRAINING_PERCENTAGE', 0.8)
+BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 128))
+EPOCHS = int(os.environ.get('EPOCHS', 25))
+TRAINING_PERCENTAGE = float(os.environ.get('TRAINING_PERCENTAGE', 0.8))
+NUM_CLASSES = int(os.environ.get('NUM_CLASSES', 200))
 
 
 def ffnn(x_train, y_train):
@@ -17,26 +18,26 @@ def ffnn(x_train, y_train):
     x_test = np.array(x_train[int(len(x_train) * TRAINING_PERCENTAGE):])
     y_test = np.array(y_train[int(len(y_train) * TRAINING_PERCENTAGE):])
 
-    print(x_train[0])
-    print([type(x) for x in x_train[0]])
-    print(y_train[0])
-
-    y_train = to_categorical(y_train, num_classes=100)
-    y_test = to_categorical(y_test, num_classes=100)
+    y_train = to_categorical(y_train, num_classes=NUM_CLASSES)
+    y_test = to_categorical(y_test, num_classes=NUM_CLASSES)
  
     model = Sequential([
-        Dense(len(x_train[0]), activation='relu', input_dim=len(x_train[0])),
+        Dense(len(x_train[0]), input_dim=len(x_train[0])),
+        LeakyReLU(alpha=0.3),
         Dropout(0.2),
-        Dense(20, activation='relu'),
+        Dense(20),
+        LeakyReLU(alpha=0.3),
         Dropout(0.2),
-        Dense(100, activation='softmax')
+        Dense(NUM_CLASSES, activation='softmax')
     ])
 
     model.compile(
-        loss='mean_squared_logarithmic_error',
+        loss='mean_squared_error',
         optimizer='adam',
         metrics=['accuracy']
     )
+
+    model.summary()
 
     model.fit(
         x_train, y_train,
