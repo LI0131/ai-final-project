@@ -11,12 +11,12 @@ TRAINING_PERCENTAGE = float(os.environ.get('TRAINING_PERCENTAGE', 0.8))
 NUM_CLASSES = int(os.environ.get('NUM_CLASSES', 200))
 
 
-def ffnn(x_train, y_train):
+def ffnn(x_data, y_data):
 
-    x_train = np.array(x_train[: int(len(x_train) * TRAINING_PERCENTAGE)])
-    y_train = np.array(y_train[: int(len(y_train) * TRAINING_PERCENTAGE)])
-    x_test = np.array(x_train[int(len(x_train) * TRAINING_PERCENTAGE):])
-    y_test = np.array(y_train[int(len(y_train) * TRAINING_PERCENTAGE):])
+    x_train = np.array(x_data[: int(len(x_data) * TRAINING_PERCENTAGE)])
+    y_train = np.array(y_data[: int(len(y_data) * TRAINING_PERCENTAGE)])
+    x_test = np.array(x_data[int(len(x_data) * TRAINING_PERCENTAGE):])
+    y_test = np.array(y_data[int(len(y_data) * TRAINING_PERCENTAGE):])
 
     y_train = to_categorical(y_train, num_classes=NUM_CLASSES)
     y_test = to_categorical(y_test, num_classes=NUM_CLASSES)
