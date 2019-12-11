@@ -15,10 +15,6 @@ def categorize(data):
     categorized = []
     for item in data:
         sub_arr = [0]*NUM_CLASSES
-        '''if item > 0:
-            sub_arr[100 + item] = 1
-        else:
-            sub_arr[100 - item] = 1'''
         sub_arr[100 + item] = 1
         categorized.append(np.array(sub_arr))
     return np.array(categorized)
