@@ -56,9 +56,20 @@ def run(path):
     for col in ['timesnap', 'timehandoff']:
         data[col] = encode_game_time(data, col)
 
-    data = data.drop(columns=['windspeed', 'winddirection', 'temperature', 'gameweather', 'stadiumtype'])
+    data = data.drop(
+        columns=[
+            'windspeed', 'winddirection', 'temperature',
+            'gameweather', 'stadiumtype', 'nflid',
+            'gameid', 'nflidrusher', 'humidity'
+        ]
+    )
+    
+    for index, row in data.iterrows():
+        if pd.isna(data['orientation'][index]):
+            data['orientation'][index] = data['orientation'].mean(skipna= True)
+        if pd.isna(data['dir'][index]):
+            data['dir'][index] = data['dir'].mean(skipna= True)
 
-    # this removes rows which still contain empty values
     data = data.dropna()
     
     # values which we will map
@@ -94,5 +105,46 @@ def run(path):
         )
     ]
 
+    num = 0
+    labels = []
+    for index, row in data.iterrows():
+        if num % 22 == 0:
+            labels.append(data['yards'][index])
+        num +=1
+
+    playID = data['playid']
+    data = data.drop(columns=['yards'])
+    data = data.drop(columns=['playid'])
+
+    one_play_data = []
+    all_play_data = []
+    temp_playid = playID[0]
+    play_counter = 0
+
+    print("Pierce is an idiot")
+    
+    for index, row in data.iterrows():
+        if playID[index] == (temp_playid):
+            one_play_data.append(row.values.flatten())
+        else:
+            if len(one_play_data) > 0:
+                all_play_data.append(one_play_data)
+                one_play_data = []
+                play_counter += 1
+            temp_playid = playID[index]
+            one_play_data.append(row.values.flatten())
+            #print(str(play_counter), 'test')
+    all_play_data.append(one_play_data)
+
+    all_play_data = np.asarray(all_play_data)
+
+    # final_play_data = []
+    # for array in all_play_data:
+    #     final_play_data.append(array.flatten())
+
+    # final_play_data = np.asarray(final_play_data)
+
+    print("Pierce is not an idiot")
+    
     # flatten rows in dataframe
-    return np.array([row.values.flatten() for index, row in data.iterrows()], dtype='float32'), data['yards']
+    return all_play_data, labels
