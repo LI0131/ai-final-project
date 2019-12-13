@@ -133,16 +133,9 @@ def run(path):
                 play_counter += 1
             temp_playid = playID[index]
             one_play_data.append(row.values.flatten())
-            #print(str(play_counter), 'test')
     all_play_data.append(one_play_data)
 
     all_play_data = np.asarray(all_play_data)
-
-    # final_play_data = []
-    # for array in all_play_data:
-    #     final_play_data.append(array.flatten())
-
-    # final_play_data = np.asarray(final_play_data)
 
     print("Pierce is not an idiot")
     
