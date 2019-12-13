@@ -6,6 +6,7 @@ from keras.layers import Dense, Dropout, Flatten, LeakyReLU, Input
 
 from export import export
 from eval import crps
+from graphing import graph
 
 TRAINING_PERCENTAGE = float(os.environ.get('TRAINING_PERCENTAGE', 0.8))
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 64))
@@ -43,12 +44,21 @@ def ae(x_data, y_data):
     autoencoder.add(Dense(23, activation=LeakyReLU(alpha=0.3)))
     autoencoder.add(Dense(len(x_train[0]), activation=LeakyReLU(alpha=0.3)))
 
-    autoencoder.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
-    autoencoder.fit(x_train, x_train,
-                epochs=100,
-                batch_size=128,
-                validation_data=(x_test, x_test), verbose=2)
+    autoencoder.compile(
+        optimizer='adam',
+        loss='mean_squared_error',
+        metrics=[crps]
+    )
 
+    history = autoencoder.fit(
+        x_train, x_train,
+        epochs=100,
+        batch_size=128,
+        validation_data=(x_test, x_test),
+        verbose=2
+    )
+
+    graph(history, to_file='images/ae.png')
 
     inputs = Input(shape=(len(x_train[0]),))
     encoder_layer1 = autoencoder.layers[0](inputs)
@@ -76,12 +86,14 @@ def ae(x_data, y_data):
         metrics=[crps]
     )
 
-    model.fit(
+    history = model.fit(
         encoded_x_train, y_train,
         batch_size=BATCH_SIZE,
         epochs=EPOCHS,
         validation_data=(encoded_x_test, y_test)
     )
+
+    graph(history, to_file='images/ae-ffnn.png')
 
     #Evaluating the model
     scores = model.evaluate(encoded_x_test, y_test)

@@ -3,10 +3,10 @@ import keras
 import numpy as np
 from keras.models import Sequential, Model
 from keras.layers import Dense, Dropout, Flatten, LeakyReLU, Input, BatchNormalization
-from keras.utils import to_categorical
 
 from eval import crps
 from export import export
+from graphing import graph
 
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 64))
 EPOCHS = int(os.environ.get('FFNN_EPOCHS', 1))
@@ -70,13 +70,17 @@ def ffnn(x_data, y_data):
 
     model.summary()
 
-    model.fit(
+    history = model.fit(
         x_train, y_train,
         batch_size=BATCH_SIZE,
         epochs=EPOCHS,
         validation_data=(x_test, y_test),
         verbose=2
     )
+
+    print(history.history)
+
+    graph(history, to_file='images/ffnn.png')
 
     #Evaluating the model
     scores = model.evaluate(x_test, y_test, verbose=2)

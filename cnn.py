@@ -7,6 +7,7 @@ from keras.layers import Flatten, Dense, BatchNormalization, Dropout
 
 from eval import crps
 from export import export
+from graphing import graph
 
 NUM_CLASSES = int(os.environ.get('NUM_CLASSES', 200))
 TRAINING_PERCENTAGE = float(os.environ.get('TRAINING_PERCENTAGE', 0.8))
@@ -62,11 +63,13 @@ def cnn(x_data, y_data):
         metrics=[crps]
     )
 
-    model.fit(
+    history = model.fit(
         x_train, y_train,
         epochs=EPOCHS,
         validation_data=(x_test, y_test)
     )
+
+    graph(history, to_file='images/cnn.png')
 
     #Evaluating the model
     scores = model.evaluate(x_test, y_test, verbose=2)
