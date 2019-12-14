@@ -74,7 +74,7 @@ def run(path):
             data['offenseformation'][index] = data['offenseformation'].mode(skipna=True)
             
     #Check for missing values
-    dfObj.isnull().sum()
+    data.isnull().sum()
     #Drop Missing Values
     data = data.dropna()
     
