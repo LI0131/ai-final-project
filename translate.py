@@ -69,6 +69,8 @@ def run(path):
             data['orientation'][index] = data['orientation'].mean(skipna= True)
         if pd.isna(data['dir'][index]):
             data['dir'][index] = data['dir'].mean(skipna= True)
+        if pd.isna(data['offenseformation'][index]):
+            data['offenseformation'][index] = data['offenseformation'].mode(skipna=True)
 
     data = data.dropna()
     
