@@ -39,7 +39,7 @@ def rnn(x_data, y_data):
         validation_data=(x_test, y_test)
     )
 
-    graph(history, to_file='images/rnn.png')
+    # graph(history, to_file='images/rnn.png')
 
     scores = model.evaluate(x_test, y_test)
     print(f'CRPS RNN: {scores[1]}')

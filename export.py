@@ -22,7 +22,6 @@ def export(training, testing, model):
     ]
 
     for instance in pred:
-        print(instance)
         yardage = []
         for i in range(-99, 100, 1):
             if i < instance[0]:

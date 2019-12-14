@@ -9,7 +9,7 @@ from export import export
 from graphing import graph
 
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 64))
-EPOCHS = int(os.environ.get('FFNN_EPOCHS', 1))
+EPOCHS = int(os.environ.get('FFNN_EPOCHS', 100))
 TRAINING_PERCENTAGE = float(os.environ.get('TRAINING_PERCENTAGE', 0.8))
 NUM_CLASSES = int(os.environ.get('NUM_CLASSES', 200))
 
@@ -78,9 +78,7 @@ def ffnn(x_data, y_data):
         verbose=2
     )
 
-    print(history.history)
-
-    graph(history, to_file='images/ffnn.png')
+    # graph(history, to_file='images/ffnn.png')
 
     #Evaluating the model
     scores = model.evaluate(x_test, y_test, verbose=2)

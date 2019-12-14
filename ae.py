@@ -93,12 +93,8 @@ def ae(x_data, y_data):
         validation_data=(encoded_x_test, y_test)
     )
 
-    graph(history, to_file='images/ae-ffnn.png')
+    # graph(history, to_file='images/ae-ffnn.png')
 
     #Evaluating the model
     scores = model.evaluate(encoded_x_test, y_test)
     print(f'CRPS AE: {scores[1]}')
-
-    df = export(x_train, x_test, model)
-
-    print(df)

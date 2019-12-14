@@ -69,7 +69,7 @@ def cnn(x_data, y_data):
         validation_data=(x_test, y_test)
     )
 
-    graph(history, to_file='images/cnn.png')
+    # graph(history, to_file='images/cnn.png')
 
     #Evaluating the model
     scores = model.evaluate(x_test, y_test, verbose=2)
