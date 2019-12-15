@@ -2,7 +2,9 @@
 Final Project for CS-315
 
 To run:
-Open app.py, uncomment the model you wish to evaluate, then run that file. 
+Download the dataset from kaggle.com at https://www.kaggle.com/c/nfl-big-data-bowl-2020/data
+
+To run this project specify the model you would like to run using --ffnn, --rnn, --cnn, or --ae and then specify the data file using the --file specifier. 
 
 Translator.py
 In our translator.py file, we perform all of the data wrangling methods necessary for the data to be fed into each of our models. The data is very diverse containing ints, floats, strings, etc. We used the python module pandas throughout this script. First, we read the csv (downloaded from kaggle.com) so that we can create a pandas dataframe. Next we convert the column names to lowercase, so that each form of entry is uniform. 
