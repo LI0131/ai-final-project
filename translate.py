@@ -69,7 +69,13 @@ def run(path):
             data['orientation'][index] = data['orientation'].mean(skipna= True)
         if pd.isna(data['dir'][index]):
             data['dir'][index] = data['dir'].mean(skipna= True)
-
+        #Replace missing offense formation values with most common
+        if pd.isna(data['offenseformation'][index]):
+            data['offenseformation'][index] = data['offenseformation'].mode(skipna=True)
+            
+    #Check for missing values
+    data.isnull().sum()
+    #Drop Missing Values
     data = data.dropna()
     
     # values which we will map
