@@ -53,3 +53,10 @@ We also used a two-dimensional CNN as one of our models for comparison. We were 
 
 Output
 
+![CNN Output](output/cnn.out.png)
+
+![RNN Output](output/rnn.out.png)
+
+![FFNN Output](output/ffnn.out.png)
+
+![AE Output](output/ae.out.png)
